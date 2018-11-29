@@ -12,6 +12,8 @@ public interface EmployeeService {
 	
 	public void saveEmployee(Employee employee);
 	
+	public void saveEmployees(List<Employee> employees);
+	
 	public void deleteEmployee(Long employeeId);
 	
 	public void updateEmployee(Employee employee);

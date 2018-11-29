@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.employee.entity.Employee;
@@ -18,50 +19,58 @@ import com.employee.exception.EmployeeNotFoundException;
 import com.employee.service.EmployeeService;
 
 @RestController
+@RequestMapping("api")
 public class EmployeeRestCotroller {
 
 	@Autowired
 	private EmployeeService employeeService; 
 	
-	public void setEmployeeService(EmployeeService employeeService) {
-		this.employeeService = employeeService;
-	}
-	
-	@GetMapping("/api/employees")
-	public List<Employee> getAllEmployees(){
+	@GetMapping("v1/employees")
+	public ResponseEntity<List<Employee>> getAllEmployees(){
 		List<Employee> employees = employeeService.getAllEmployees();
-		return employees;
+		return new ResponseEntity<List<Employee>>(employees , HttpStatus.OK);
 	}
 	
-	@GetMapping("api/employees/{employeeId}")
-	public Employee getEmployee(@PathVariable("employeeId") Long employeeId) {
-		return employeeService.getEmployee(employeeId);
+	@GetMapping("v1/employees/{employeeId}")
+	public ResponseEntity<Employee> getEmployee(@PathVariable("employeeId") Long employeeId) {
+		return new ResponseEntity<Employee>(employeeService.getEmployee(employeeId), HttpStatus.OK);
 	}
 	
-	@PostMapping("api/employees")
-	public ResponseEntity<Object> saveEmployee(@RequestBody Employee employee) {
+	/*@PostMapping("v1/employees")
+	public ResponseEntity<String> saveEmployee(@RequestBody Employee employee) {
 		employeeService.saveEmployee(employee);
-		return new ResponseEntity<>("Employee detail created successfully", HttpStatus.CREATED);
+		return new ResponseEntity<String>("Employee detail created successfully", HttpStatus.CREATED);
+	}*/
+	
+	@PostMapping("v1/employees")
+	public ResponseEntity<String> saveEmployees(@RequestBody List<Employee> employees) {
+		employeeService.saveEmployees(employees);
+		return new ResponseEntity<String>("Employee detail created successfully", HttpStatus.CREATED);
 	}
 	
-	@DeleteMapping("api/employees/{employeeId}")
-	public ResponseEntity<Object> deleteEmployee(@PathVariable("employeeId") Long employeeId) {
-		employeeService.deleteEmployee(employeeId);
-		return new ResponseEntity<>("Employee detail deleted successfully", HttpStatus.OK);
+	@DeleteMapping("v1/employees/{employeeId}")
+	public ResponseEntity<String> deleteEmployee(@PathVariable("employeeId") Long employeeId) {
+		Employee emp = employeeService.getEmployee(employeeId);
+		if(emp != null) {
+			employeeService.deleteEmployee(employeeId);
+			return new ResponseEntity<String>("Employee detail deleted successfully", HttpStatus.OK);
+		}else {
+			throw new EmployeeNotFoundException();
+		}
 	}
 	
-	@PutMapping("api/employees/{employeeId}")
-	public ResponseEntity<Object> updateEmployee(@RequestBody Employee employee, @PathVariable("employeeId") Long employeeId) {
+	@PutMapping("v1/employees/{employeeId}")
+	public ResponseEntity<String> updateEmployee(@RequestBody Employee employee, @PathVariable("employeeId") Long employeeId) {
 		if((employee.getId() != null) && (employee.getId() == employeeId)) {
 			Employee emp = employeeService.getEmployee(employeeId);
 			if(emp != null) {
 				employeeService.updateEmployee(employee);
-				return new ResponseEntity<>("Employee detail deleted successfully", HttpStatus.OK);
+				return new ResponseEntity<String>("Employee detail deleted successfully", HttpStatus.OK);
 			}else {
 				throw new EmployeeNotFoundException();
 			}
 		}else {
-			return new ResponseEntity<>("Invalid Employee Id in Request", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("Invalid Employee Id in Request", HttpStatus.BAD_REQUEST);
 		}
 	}
 }

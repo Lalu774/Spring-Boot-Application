@@ -42,6 +42,10 @@ public class EmployeeServiceImpl implements EmployeeService{
 		employeeRepository.save(employee);
 	}
 
+	public void saveEmployees(List<Employee> employees) {
+		employeeRepository.saveAll(employees);
+	}
+	
 	public void deleteEmployee(Long employeeId) {
 		employeeRepository.deleteById(employeeId);
 	}
