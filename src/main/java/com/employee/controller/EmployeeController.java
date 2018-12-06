@@ -5,14 +5,17 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.employee.entity.Employee;
 import com.employee.exception.EmployeeNotFoundException;
@@ -26,9 +29,13 @@ public class EmployeeController {
 	private EmployeeService employeeService; 
 	
 	@GetMapping("v1/employees")
-	public ResponseEntity<List<Employee>> getAllEmployees(){
+	public ModelAndView getAllEmployees(){
 		List<Employee> employees = employeeService.getAllEmployees();
-		return new ResponseEntity<List<Employee>>(employees , HttpStatus.OK);
+		//return new ResponseEntity<List<Employee>>(employees , HttpStatus.OK);
+		ModelAndView model = new ModelAndView();
+		model.addObject("employees", employees);
+		model.setViewName("index");
+		return model;
 	}
 	
 	@GetMapping("v1/employees/{employeeId}")
@@ -37,18 +44,22 @@ public class EmployeeController {
 	}
 	
 	@PostMapping("v1/employees")
-	public ResponseEntity<String> saveEmployee(@RequestBody Employee employee) {
+	public ModelAndView saveEmployee(@ModelAttribute Employee employee) {
+		
+		ModelAndView model = new ModelAndView("redirect:/api/v1/employees");
+		
 		Employee emp = employeeService.checkEmployee(employee.getId());
 		if(emp == null) {
 			int result = employeeService.saveEmployee(employee);
 			if(result >= 1) {
-				return new ResponseEntity<String>("Employee detail created successfully", HttpStatus.CREATED);
+				model.setStatus(HttpStatus.OK);;
 			}else {
-				return new ResponseEntity<String>("Error occured while creatig employee detail", HttpStatus.BAD_REQUEST);
+				model.addObject("errorMessage", "Error occured while creating employee detail");
 			}
 		}else {
-			return new ResponseEntity<String>("Employee already exists", HttpStatus.OK);
+			model.addObject("errorMessage", "Employee already exists");
 		}
+		return model;
 	}
 	
 	/*@PostMapping("v1/employees")
