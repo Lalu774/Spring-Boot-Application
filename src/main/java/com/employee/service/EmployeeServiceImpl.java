@@ -33,6 +33,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 		}
 	}
 	
+	public Employee checkEmployee(Long employeeId) {
+		Employee employee = employeRepository.checkEmployee(employeeId);
+		return employee;
+	}
+	
 	public int saveEmployee(Employee employee) {
 		int result = employeRepository.saveEmployee(employee);
 		return result;
