@@ -1,7 +1,6 @@
 package com.employee.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,12 +11,12 @@ import com.employee.repository.EmployeeRepository;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
-
+	
 	@Autowired
-	private EmployeeRepository employeeRepository;
+	private EmployeeRepository employeRepository;
 		
 	public List<Employee> getAllEmployees() {
-		List<Employee> employees = employeeRepository.findAll();
+		List<Employee> employees = employeRepository.getAllEmployees();
 		if(!employees.isEmpty()) {
 			return employees;
 		}else {
@@ -26,28 +25,26 @@ public class EmployeeServiceImpl implements EmployeeService{
 	}
 
 	public Employee getEmployee(Long employeeId) {
-		Optional<Employee> employee = employeeRepository.findById(employeeId);
-		if (employee.isPresent()) {
-			return employee.get();
+		Employee employee = employeRepository.getEmployee(employeeId);
+		if (!employee.getName().isEmpty()) {
+			return employee;
 		}else {
 			throw new EmployeeNotFoundException();
 		}
 	}
 	
-	public void saveEmployee(Employee employee) {
-		employeeRepository.save(employee);
-	}
-
-	public void saveEmployees(List<Employee> employees) {
-		employeeRepository.saveAll(employees);
+	public int saveEmployee(Employee employee) {
+		int result = employeRepository.saveEmployee(employee);
+		return result;
 	}
 	
 	public void deleteEmployee(Long employeeId) {
-		employeeRepository.deleteById(employeeId);
+		employeRepository.deleteEmployee(employeeId);
 	}
 
-	public void updateEmployee(Employee employee) {
-		employeeRepository.save(employee);
+	public int updateEmployee(Employee employee) {
+		int result = employeRepository.updateEmployee(employee);
+		return result;
 	}
 
 }

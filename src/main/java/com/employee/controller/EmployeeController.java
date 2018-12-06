@@ -36,17 +36,21 @@ public class EmployeeController {
 		return new ResponseEntity<Employee>(employeeService.getEmployee(employeeId), HttpStatus.OK);
 	}
 	
-	/*@PostMapping("v1/employees")
-	public ResponseEntity<String> saveEmployee(@RequestBody Employee employee) {
-		employeeService.saveEmployee(employee);
-		return new ResponseEntity<String>("Employee detail created successfully", HttpStatus.CREATED);
-	}*/
-	
 	@PostMapping("v1/employees")
+	public ResponseEntity<String> saveEmployee(@RequestBody Employee employee) {
+		int result = employeeService.saveEmployee(employee);
+		if(result >= 1) {
+			return new ResponseEntity<String>("Employee detail created successfully", HttpStatus.CREATED);
+		}else {
+			return new ResponseEntity<String>("Error occured while creatig employee detail", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	/*@PostMapping("v1/employees")
 	public ResponseEntity<String> saveEmployees(@RequestBody List<Employee> employees) {
 		employeeService.saveEmployees(employees);
 		return new ResponseEntity<String>("Employee detail created successfully", HttpStatus.CREATED);
-	}
+	}*/
 	
 	@DeleteMapping("v1/employees/{employeeId}")
 	public ResponseEntity<String> deleteEmployee(@PathVariable("employeeId") Long employeeId) {
@@ -64,8 +68,12 @@ public class EmployeeController {
 		if((employee.getId() != null) && (employee.getId() == employeeId)) {
 			Employee emp = employeeService.getEmployee(employeeId);
 			if(emp != null) {
-				employeeService.updateEmployee(employee);
-				return new ResponseEntity<String>("Employee detail deleted successfully", HttpStatus.OK);
+				int result = employeeService.updateEmployee(employee);
+				if(result >= 1) {
+					return new ResponseEntity<String>("Employee detail updated successfully", HttpStatus.OK);
+				}else {
+					return new ResponseEntity<String>("Employee detail is not updated successfully", HttpStatus.BAD_REQUEST);
+				}
 			}else {
 				throw new EmployeeNotFoundException();
 			}
