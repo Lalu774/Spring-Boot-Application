@@ -48,7 +48,7 @@ public class EmployeeController {
 		
 		ModelAndView model = new ModelAndView("redirect:/api/v1/employees");
 		
-		Employee emp = employeeService.checkEmployee(employee.getId());
+		Employee emp = employeeService.isEmployeeExists(employee.getId());
 		if(emp == null) {
 			int result = employeeService.saveEmployee(employee);
 			if(result >= 1) {

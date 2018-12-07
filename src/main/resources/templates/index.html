@@ -1,52 +1,67 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-<title>Spring Boot JdbcTemplate, Thymeleaf, JPA Example</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<!-- END META SECTION -->
-<!--  BEGIN STYLE -->
-<style>
-table, th, td {
-    border: 1px solid black;
-    padding: 1px;
-}
-</style>
-<!--  END STYLE -->
- 
-</head>
-<body>
-<div>
- <h2>Create/update Employee detail</h2>
- <form action="/api/v1/employees" th:action="@{/api/v1/employees}" th:object="${employee}" method="post">
- <label>Id<input type="text" name="id" id="id"></input></label>
- <label>Name<input type="text" name="name" id="name"></input></label>
- <label>Role<input type="text" name="role" id="role"></input></label>
- <label>Department<input type="text" name="department" id="department"></input></label>
- <input type="submit" value="Submit"></input>
- </form>
- </div>
- <div>
- <h2>Employee Details</h2>
- <table>
- <thead>
- <tr>
- <th>ID</th>
- <th>Name</th>
- <th>Role</th>
- <th>Department</th>
- </tr>
- </thead>
- <tbody>
- <tr th:each="employees : ${employees}">
- <td th:text="${employees.id}">Text ...</td>
- <td th:text="${employees.name}">Text ...</td>
- <td th:text="${employees.role}">Text ...</td>
- <td th:text="${employees.department}">Text...</td>
- </tr>
- </tbody>
- </table>
- </div>
-</body>
+	<head>
+		<title>Employee Detail</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<style>
+			.container{
+				padding: 30px 200px;
+			}
+			.form-container,.table-container{
+				margin: 20px;
+				padding: 20px 10px;
+				border: 1px solid;
+			}
+			.btn{
+			    padding-top: 10px;
+			}
+			table, th, td {
+    			border: 1px solid black;
+    			padding: 1px;
+			}
+			h2{
+				margin: 0px;
+			}
+		</style>
+ 	</head>
+	<body>
+		<div class="container">
+		<div class="form-container">
+ 			<h2>CreateEmployee detail</h2>
+			<hr>
+ 			<form action="/api/v1/employees" th:action="@{/api/v1/employees}" th:object="${employee}" method="post">
+				<label>Id<input type="text" name="id" id="id"></input></label>
+				<label>Name<input type="text" name="name" id="name"></input></label>
+				<label>Role<input type="text" name="role" id="role"></input></label>
+				<label>Department<input type="text" name="department" id="department"></input></label>
+				<div class="btn"><input type="submit" value="Submit"></input></div>
+ 			</form>
+ 		</div>
+ 		<div class="table-container">
+			 <h2>Employee List</h2>
+			 <hr>
+			 <table>
+ 				<thead>
+ 					<tr>
+						<th>ID</th>
+						<th>Name</th>
+						<th>Role</th>
+						<th>Department</th>
+ 					</tr>
+ 				</thead>
+ 				<tbody>
+ 					<tr th:each="employees : ${employees}">
+						<td th:text="${employees.id}"></td>
+						<td th:text="${employees.name}"></td>
+						<td th:text="${employees.role}"></td>
+						<td th:text="${employees.department}"></td>
+ 					</tr>
+ 				</tbody>
+ 			</table>
+ 		</div>
+ 		</div>
+	</body>
 </html>

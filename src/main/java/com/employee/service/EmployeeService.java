@@ -19,5 +19,5 @@ public interface EmployeeService {
 	
 	public int updateEmployee(Employee employee);
 	
-	public Employee checkEmployee(Long employeeId);
+	public Employee isEmployeeExists(Long employeeId);
 }

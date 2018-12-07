@@ -38,7 +38,7 @@ public class EmployeeRepository {
 		
 	}
 	
-	public Employee checkEmployee(Long employeeId) {
+	public Employee isEmployeeExists(Long employeeId) {
 		String sql = "SELECT ID, NAME, ROLE, DEPARTMENT FROM EMPLOYEE WHERE ID=?";
 		Employee employee = null;
 		try{

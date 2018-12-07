@@ -33,8 +33,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 		}
 	}
 	
-	public Employee checkEmployee(Long employeeId) {
-		Employee employee = employeRepository.checkEmployee(employeeId);
+	public Employee isEmployeeExists(Long employeeId) {
+		Employee employee = employeRepository.isEmployeeExists(employeeId);
 		return employee;
 	}
 	
